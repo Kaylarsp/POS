@@ -16,28 +16,28 @@ class KategoriSeeder extends Seeder
         DB::table('m_kategori')->insert([
             [
                 'kategori_id' => 1,
-                'nama' => 'Elektronik',
-                'deskripsi' => 'Barang elektronik seperti laptop, HP, dan TV',
+                'kategori_kode' =>'ELK',
+                'kategori_nama' => 'Elektronik',
             ],
             [
                 'kategori_id' => 2,
-                'nama' => 'Pakaian',
-                'deskripsi' => 'Berbagai jenis pakaian seperti kaos, kemeja, dan celana',
+                'kategori_kode' =>'PKN',
+                'kategori_nama' => 'Pakaian',
             ],
             [
                 'kategori_id' => 3,
-                'nama' => 'Makanan',
-                'deskripsi' => 'Produk makanan seperti mie instan, roti, dan snack',
+                'kategori_kode' =>'MKN',
+                'kategori_nama' => 'Makanan',
             ],
             [
                 'kategori_id' => 4,
-                'nama' => 'Minuman',
-                'deskripsi' => 'Berbagai minuman seperti teh, kopi, dan jus',
+                'kategori_kode' =>'MIN',
+                'kategori_nama' => 'Minuman',
             ],
             [
                 'kategori_id' => 5,
-                'nama' => 'Alat Tulis',
-                'deskripsi' => 'Peralatan menulis seperti pensil, pulpen, dan buku',
+                'kategori_kode' =>'ATK',
+                'kategori_nama' => 'Alat Tulis',
             ],
         ]);
     }
