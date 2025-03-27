@@ -1,15 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
-use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\SalesController;
+use App\Http\Controllers\WelcomeController;
 
-// Halaman Home
-Route::get('/', [HomeController::class, 'home']);
+// Halaman Welcome
+Route::get('/', [WelcomeController::class, 'index']);
 
 // Route Kategori (CRUD)
 Route::get('/kategori', [KategoriController::class, 'index']);
