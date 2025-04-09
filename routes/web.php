@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\StokController;
 
 // Halaman Welcome
 Route::get('/', [WelcomeController::class, 'index']);
@@ -40,4 +41,15 @@ Route::group(['prefix' => 'kategori'], function () {
     Route::get('/{id}/edit', [KategoriController::class, 'edit']); // menampilkan halaman form edit kategori
     Route::put('/{id}', [KategoriController::class, 'update']); // menyimpan perubahan data kategori
     Route::delete('/{id}', [KategoriController::class, 'destroy']); // menghapus data kategori
+});
+
+Route::group(['prefix' => 'stok'], function () {
+    Route::get('/', [StokController::class, 'index']); // menampilkan halaman awal stok
+    Route::post('/list', [StokController::class, 'list']); // menampilkan data stok dalam bentuk json untuk datatables
+    Route::get('/create', [StokController::class, 'create']); // menampilkan halaman form tambah stok
+    Route::post('/', [StokController::class, 'store']); // menyimpan data stok baru
+    Route::get('/{id}', [StokController::class, 'show']); // menampilkan detail stok
+    Route::get('/{id}/edit', [StokController::class, 'edit']); // menampilkan halaman form edit stok
+    Route::put('/{id}', [StokController::class, 'update']); // menyimpan perubahan data stok
+    Route::delete('/{id}', [StokController::class, 'destroy']); // menghapus data stok
 });
