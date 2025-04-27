@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Hash;
 use App\Models\LevelModel;
+use App\Models\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 
@@ -237,12 +238,12 @@ class UserController extends Controller
         } else {
             $request['password'] = bcrypt($request->password);
         }
-        
+
         // Coba update
         $check->update($request->all());
-        
+
         // return response()->json(['status' => 'success', 'message' => 'Data berhasil diupdate']);
-                
+
         // Cek apakah request berasal dari AJAX
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
@@ -251,10 +252,10 @@ class UserController extends Controller
                 'nama'     => 'required|max:100',
                 'password' => 'nullable|min:6|max:20'
             ];
-    
+
             // Validasi data
             $validator = Validator::make($request->all(), $rules);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'status'   => false,
@@ -262,7 +263,7 @@ class UserController extends Controller
                     'msgField' => $validator->errors()
                 ]);
             }
-    
+
             // Cari user berdasarkan ID
             $check = UserModel::find($id);
             if ($check) {
@@ -270,10 +271,10 @@ class UserController extends Controller
                 if (!$request->filled('password')) {
                     $request->request->remove('password');
                 }
-    
+
                 // Update data user
                 $check->update($request->all());
-    
+
                 return response()->json([
                     'status'  => true,
                     'message' => 'Data berhasil diupdate'
@@ -285,11 +286,11 @@ class UserController extends Controller
                 ]);
             }
         }
-    
+
         // Redirect jika bukan request ajax
         return redirect('/user')->with('success', 'Data user berhasil diubah');
     }
-    
+
     //  Menghapus data user
     public function destroy(string $id)
     {
@@ -306,5 +307,33 @@ class UserController extends Controller
             // Jika terjadi error ketika menghapus data, redirect kembali ke halaman dengan membawa pesan error
             return redirect('/user')->with('error', 'Data user gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
         }
+    }
+
+    public function confirm_ajax(string $id)
+    {
+        $user = UserModel::find($id);
+
+        return view('user.confirm_ajax', ['user' => $user]);
+    }
+
+    public function delete_ajax(Request $request, $id)
+    {
+        // cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            $user = UserModel::find($id);
+            if ($user) {
+                $user->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        return redirect('/user');
     }
 }
