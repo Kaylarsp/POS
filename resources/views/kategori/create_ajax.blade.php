@@ -10,16 +10,14 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="kategori_kode">Kode Kategori</label>
+                    <label>Kategori Kode</label>
                     <input type="text" name="kategori_kode" id="kategori_kode" class="form-control" required>
-                    <small id="error-kategori_kode" class="text-danger"></small>
+                    <small id="error-kategori_kode" class="error-text form-text text-danger"></small>
                 </div>
-
-                {{-- Input Nama Kategori --}}
                 <div class="form-group">
-                    <label for="kategori_nama">Nama Kategori</label>
+                    <label>Nama Kategori</label>
                     <input type="text" name="kategori_nama" id="kategori_nama" class="form-control" required>
-                    <small id="error-kategori_nama" class="text-danger"></small>
+                    <small id="error-kategori_nama" class="error-text form-text text-danger"></small>
                 </div>
             </div>
             <div class="modal-footer">

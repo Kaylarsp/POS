@@ -63,9 +63,8 @@
                 });
             });
         }
-
         $(document).ready(function() {
-            var datakategori = $('#table_kategori').DataTable({
+            var dataKategori = $('#table_kategori').DataTable({
                 // serverSide: true, jika ingin menggunakan server side processing serverSide: true,
                 ajax: {
                     "url": "{{ url('kategori/list') }}",
@@ -100,49 +99,8 @@
             });
 
             $('#kategori_id').on('change', function() {
-                datakategori.ajax.reload();
+                dataKategori.ajax.reload();
             })
-
-        });
-    </script>
-    <script>
-        // Tangani form submit dari form yang dimuat via AJAX
-        $(document).on('submit', '#form-tambah', function(e) {
-            e.preventDefault(); // Hindari form reload
-    
-            let formData = new FormData(this);
-            let url = "{{ url('/kategori/store_ajax') }}"; // Ganti sesuai route kamu
-    
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: formData,
-                contentType: false,
-                processData: false,
-                cache: false,
-                beforeSend: function() {
-                    $('.text-danger').html(''); // Kosongkan error sebelumnya
-                },
-                success: function(response) {
-                    if (response.status) {
-                        alert(response.message); // Berhasil
-                        $('#myModal').modal('hide'); // Tutup modal
-                        $('#table_kategori').DataTable().ajax.reload(); // Reload datatable
-                    } else {
-                        if (response.msgField) {
-                            // Tampilkan error field
-                            $.each(response.msgField, function(key, value) {
-                                $('#error-' + key).html(value[0]);
-                            });
-                        } else {
-                            alert(response.message); // Error umum
-                        }
-                    }
-                },
-                error: function(xhr) {
-                    alert('Terjadi kesalahan. Coba lagi nanti.');
-                }
-            });
         });
     </script>
 @endpush

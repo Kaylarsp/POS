@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\KategoriModel;
+use Illuminate\Support\Facades\DB;
+use Exception;
 use Illuminate\Support\Facades\Validator;
 
 class KategoriController extends Controller
@@ -77,44 +79,43 @@ class KategoriController extends Controller
 
     public function create_ajax()
     {
-        // $page = (object)[
-        //     'title' => 'Tambah Data Kategori (AJAX)'
-        // ];
         return view('kategori.create_ajax');
-      
     }
 
     public function store_ajax(Request $request)
     {
-        // Validasi input
+        // Validasi inputan
         $validator = Validator::make($request->all(), [
-            'kategori_kode' => 'required|max:20|unique:kategori,kategori_kode',
-            'kategori_nama' => 'required|max:100',
+            'kategori_kode' => 'required|min:2|max:10|unique:m_kategori,kategori_kode',
+            'kategori_nama' => 'required|min:3|max:100',
         ]);
 
+        // Kalau gagal validasi
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validasi gagal!',
+                'message' => 'Ada kesalahan input data!',
                 'msgField' => $validator->errors()
             ]);
         }
 
+        // Proses simpan ke database
         try {
-            // Simpan ke database
-            KategoriModel::create([
+            DB::table('m_kategori')->insert([
                 'kategori_kode' => $request->kategori_kode,
                 'kategori_nama' => $request->kategori_nama,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
 
             return response()->json([
                 'status' => true,
-                'message' => 'Data kategori berhasil disimpan.'
+                'message' => 'Data berhasil disimpan!'
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()
+                'message' => 'Gagal menyimpan data. ' . $e->getMessage()
             ]);
         }
     }
