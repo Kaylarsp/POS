@@ -1,5 +1,4 @@
 @extends('layout.template')
-
 @section('content')
 <div class="card card-outline card-primary">
     <div class="card-header">
@@ -7,7 +6,7 @@
         <div class="card-tools"></div>
     </div>
     <div class="card-body">
-        @empty($stok)
+        @empty($supplier)
         <div class="alert alert-danger alert-dismissible">
             <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
             Data yang Anda cari tidak ditemukan.
@@ -16,25 +15,27 @@
         <table class="table table-bordered table-striped table-hover table-sm">
             <tr>
                 <th>ID</th>
-                <td>{{ $stok->stok_id }}</td>
+                <td>{{ $supplier->supplier_id }}</td>
             </tr>
             <tr>
-                <th>Nama Barang</th>
-                <td>{{ $stok->barang->barang_nama }}</td>
+                <th>Nama Supplier</th>
+                <td>{{ $supplier->nama_supplier }}</td>
             </tr>
             <tr>
-                <th>Jumlah Stok</th>
-                <td>{{ $stok->stok_jumlah }}</td>
+                <th>Alamat Supplier</th>
+                <td>{{ $supplier->alamat_supplier }}</td>
+            </tr>
+            <tr>
+                <th>Telp Supplier</th>
+                <td>{{ $supplier->telp_supplier }}</td>
             </tr>
         </table>
         @endempty
-        <a href="{{ url('stok') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
+        <a href="{{ url('supplier') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
     </div>
 </div>
 @endsection
-
 @push('css')
 @endpush
-
 @push('js')
 @endpush
