@@ -17,14 +17,6 @@
                 <div class="alert alert-danger"> {{ session('error') }} </div>
             @endif
 
-            {{-- Filter (jika dibutuhkan bisa dikembangkan lagi, untuk sekarang kosong) --}}
-            {{-- <div class="form-group row">
-                <label class="col-1 control-label col-form-label">Filter :</label>
-                <div class="col-3">
-                    <input type="text" class="form-control" id="filter_supplier" placeholder="Cari Nama Supplier">
-                </div>
-            </div> --}}
-
             <table class="table table-bordered table-striped table-hover table-sm" id="table_supplier">
                 <thead>
                     <tr>
