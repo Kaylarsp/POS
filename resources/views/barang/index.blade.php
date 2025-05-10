@@ -3,8 +3,10 @@
 @section('content')
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">{{ $page->title }}</h3>
+        {{-- <h3 class="card-title">{{ $page->title }}</h3> --}}
+        <h3 class="card-title">{{ $page->title ?? 'Default Title' }}</h3>
         <div class="card-tools">
+            <button onclick="modalAction('{{ url('/barang/import') }}')" class="btn btn-sm btn-info mt-1">Import Barang</button>
             <a class="btn btn-sm btn-primary mt-1" href="{{ url('barang/create') }}">Tambah</a>
             <button onclick='modalAction("{{ url("/barang/create_ajax") }}")' class="btn btn-sm btn-success mt-1">Tambah Ajax</button>
         </div>
@@ -55,64 +57,64 @@
 @endpush
 
 @push('js')
-<script>
-     function modalAction(url) {
-            $.get(url, function(response) {
-                $('body').append(
-                    '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">' +
-                    response + '</div>');
-                $('#myModal').modal('show');
+    <script>
+        function modalAction(url) {
+                $.get(url, function(response) {
+                    $('body').append(
+                        '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">' +
+                        response + '</div>');
+                    $('#myModal').modal('show');
 
-                $('#myModal').on('hidden.bs.modal', function() {
-                    $('#myModal').remove();
+                    $('#myModal').on('hidden.bs.modal', function() {
+                        $('#myModal').remove();
+                    });
                 });
+            }
+        $(document).ready(function() {
+            var dataBarang = $('#table_barang').DataTable({
+                ajax: {
+                    url: "{{ url('barang/list') }}",
+                    type: "POST",
+                    data: function(d) {
+                        d.kategori_id = $('#kategori_id').val();
+                    },
+                    dataType: "json"
+                },
+                columns: [
+                    {
+                        data: "DT_RowIndex",
+                        className: "text-center",
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: "barang_kode"
+                    },
+                    {
+                        data: "barang_nama"
+                    },
+                    {
+                        data: "kategori.kategori_nama",
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: "harga_beli"
+                    },
+                    {
+                        data: "harga_jual"
+                    },
+                    {
+                        data: "aksi",
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
             });
-        }
-    $(document).ready(function() {
-        var dataBarang = $('#table_barang').DataTable({
-            ajax: {
-                url: "{{ url('barang/list') }}",
-                type: "POST",
-                data: function(d) {
-                    d.kategori_id = $('#kategori_id').val();
-                },
-                dataType: "json"
-            },
-            columns: [
-                {
-                    data: "DT_RowIndex",
-                    className: "text-center",
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: "barang_kode"
-                },
-                {
-                    data: "barang_nama"
-                },
-                {
-                    data: "kategori",
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: "harga_beli"
-                },
-                {
-                    data: "harga_jual"
-                },
-                {
-                    data: "aksi",
-                    orderable: false,
-                    searchable: false
-                }
-            ]
-        });
 
-        $('#kategori_id').on('change', function() {
-            dataBarang.ajax.reload();
+            $('#kategori_id').on('change', function() {
+                dataBarang.ajax.reload();
+            });
         });
-    });
-</script>
+    </script>
 @endpush
