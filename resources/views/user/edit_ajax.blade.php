@@ -3,27 +3,25 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Kesalahan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria label="Close"><span
+                <button type="button" class="close" data-dismiss="modal" aria- label="Close"><span
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
                 <div class="alert alert-danger">
-                    <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5>
-                    Data yang anda cari tidak ditemukan
+                    <h5><i class="icon fas fa-ban"></i> Kesalahan!!!</h5> Data yang anda cari tidak ditemukan
                 </div>
                 <a href="{{ url('/user') }}" class="btn btn-warning">Kembali</a>
             </div>
         </div>
     </div>
 @else
-    <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit">
-        @csrf
-        @method('PUT')
-        <div id="modal-master" class="modal-dialog modal-lg" role="document">
+    <form action="{{ url('/user/' . $user->user_id . '/update_ajax') }}" method="POST" id="form-edit"   enctype="multipart/form-data">
+        @csrf @method('PUT')
+        <div id="modal-master" class="modal-dialog modal-lg" role="document" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Data User</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria label="Close"><span
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
@@ -57,6 +55,19 @@
                             password</small>
                         <small id="error-password" class="error-text form-text text-danger"></small>
                     </div>
+                    <div class="form-group">
+                        <label>Foto Profil (opsional)</label>
+                        <input type="file" name="photo" id="photo" class="form-control" accept="image/*">
+                        <small class="form-text text-muted">Kosongkan jika tidak ingin mengganti foto</small>
+                        <small id="error-photo" class="error-text form-text text-danger"></small>
+                    </div>
+                    @if ($user->photo)
+                        <div class="form-group">
+                            <label>Foto Saat Ini:</label><br>
+                            <img src="{{ asset('/storage/uploads/photo/' . $user->photo) }}" width="100" class="img-thumbnail">
+                        </div>
+                    @endif
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
@@ -67,6 +78,11 @@
     </form>
     <script>
         $(document).ready(function() {
+            $.validator.addMethod('filesize', function(value, element, param) {
+                if (element.files.length == 0) return true;
+                return this.optional(element) || (element.files[0].size <= param);
+            }, 'Ukuran file maksimal 2 MB');
+
             $("#form-edit").validate({
                 rules: {
                     level_id: {
@@ -86,13 +102,21 @@
                     password: {
                         minlength: 6,
                         maxlength: 20
+                    },
+                    photo: {
+                        required: false, // optional, bisa true kalau wajib
+                        extension: "jpg|jpeg|png",
+                        filesize: 2048000 // maksimal 2MB
                     }
                 },
                 submitHandler: function(form) {
+                    let formData = new FormData(form);
                     $.ajax({
                         url: form.action,
                         type: form.method,
-                        data: $(form).serialize(),
+                        data: formData,
+                        contentType: false,
+                        processData: false,
                         success: function(response) {
                             if (response.status) {
                                 $('#myModal').modal('hide');
@@ -101,7 +125,7 @@
                                     title: 'Berhasil',
                                     text: response.message
                                 });
-                                dataUser.ajax.reload();
+                                tableUser.ajax.reload();
                             } else {
                                 $('.error-text').text('');
                                 $.each(response.msgField, function(prefix, val) {

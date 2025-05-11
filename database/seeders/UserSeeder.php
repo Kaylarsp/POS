@@ -20,23 +20,30 @@ class UserSeeder extends Seeder
                 'level_id' => 1,
                 'username' => 'admin',
                 'nama' => 'Administrator',
-                'password' => Hash::make('12345'),
+                'password' => Hash::make('123456'),
             ],
             [
                 'user_id' => 2,
                 'level_id' => 2,
                 'username' => 'manager',
                 'nama' => 'Manager',
-                'password' => Hash::make('12345'),
+                'password' => Hash::make('123456'),
             ],
             [
                 'user_id' => 3,
                 'level_id' => 3,
                 'username' => 'staff',
                 'nama' => 'Staff/Kasir',
-                'password' => Hash::make('12345'),
+                'password' => Hash::make('123456'),
             ],
         ];
-        DB::table('m_user')->insert($data);
+
+        foreach ($data as $user) {
+            DB::table('m_user')->updateOrInsert(
+                ['user_id' => $user['user_id']], // Kondisi pencarian
+                ['password' => $user['password']] // Data yang akan diupdate/insert
+                // Kamu juga bisa menambahkan kolom lain yang perlu diupdate jika ada perubahan
+            );
+        }
     }
 }
